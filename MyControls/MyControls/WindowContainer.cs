@@ -1,7 +1,6 @@
-﻿using System;
+using System;
 using System.Drawing;
 using System.Windows.Forms;
-using System.ComponentModel.Design;
 using System.ComponentModel;
 using System.Windows.Forms.Design;
 
@@ -10,10 +9,12 @@ namespace MyControls
     [Designer(typeof(WindowContainerDesigner))]
     public partial class WindowContainer : UserControl
     {
-        public int FirstRun = 0;
 
         private ContextMenuStrip _DropDownMenu;
 
+        /// <summary>
+        /// If a contextmenustrip is set in the designer it will enable the arrow button.
+        /// </summary>
         public ContextMenuStrip DropDownMenu
         {
             get
@@ -46,22 +47,22 @@ namespace MyControls
             }
         }
 
+        public WindowContainer()
+        {
+            InitializeComponent();
+        }
+
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         public Panel ContentPanel
         {
             get { return this._ContentPanel; }
         }
 
-        public WindowContainer()
-        {
-            InitializeComponent();
-        }
-
-        public void AddControl(Control control)
-        {
-            Table.Controls.Add(control, 0, 1);
-        }
-
+        /// <summary>
+        /// This sets the contextmenustrip position to where the arrow button is located. 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void HeaderDropdown_Click(object sender, EventArgs e)
         {
             if (_DropDownMenu != null)
@@ -72,33 +73,20 @@ namespace MyControls
             }
         }
 
+        /// <summary>
+        /// This will hide the window instead of disposing of it.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void HeaderClose_Click(object sender, EventArgs e)
         {
             this.Hide();
         }
-
-
-        protected override void OnControlAdded(ControlEventArgs e)
-        {
-            
-
-            if (FirstRun != 0)
-            {
-                Controls.Remove(e.Control);
-                
-                AddControl(e.Control);
-            }
-            else
-            {
-                base.OnControlAdded(e);
-            }
-            FirstRun++;
-
-        }
-
     }
 	
-	
+    /// <summary>
+    /// This will enable the designer to allow modifications to the inner controls.
+    /// </summary>
     internal class WindowContainerDesigner : ParentControlDesigner
     {
         public override void Initialize(IComponent component)
@@ -110,5 +98,3 @@ namespace MyControls
     }
 	
 }
-
-
